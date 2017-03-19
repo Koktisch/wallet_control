@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-type" content="text/html"; charset="utf-8" name="viewport" />
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+		<link rel="stylesheet" href="css/style.css" />
+		<script src="js/bootstrap.min.js"></script>
+		<script src="cordova.js"></script>
+		<script src="js/jquery-2.1.4.min.js"></script>
+		<script src="js/jquery.mobile-1.4.5.min.js"></script>
+		<script src="js/wallet_control.js"></script>
+	</head>
+	
+	<body>
+		<!-- Main page, will not contain header because app title name -->
+		<div data-role="page" id="mainPage">
+			<div data-role="main" class="ui-content">
+				<h1>Wallet Control</h1>
+                <a href="#shopping" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Start shopping</a>
+                <a href="#settings" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Settings</a>
+			</div>
+		</div>
+        <!-- Settings -->
+        <div data-role="panel" id="settings">
+            <h2>Settings</h2>
+            <div data-role="fieldcontain">
+                <label for="name">Balance:</label>
+                <input type="text" name="name" id="balance" value="" />
+            </div>
+            <div data-role="fieldcontain">
+                <label for="name">Currency:</label>
+                <input type="text" name="name" id="currency" value="" />
+            </div>
+            <div data-role="fieldcontain">
+                <label for="name">The amount of one expense:</label>
+                <input type="text" name="name" id="expense" value="" />
+            </div>
+            <a href="#mainPage" data-rel="close" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a ui-icon-back ui-btn-icon-left">Back</a>
+        </div> 
+        <!--Selection panel -->
+        <div data-role="page" id="shopping">
+            <div data-role="header">
+
+            </div>
+
+            <div data-role="main" class="ui-content">
+                <a href="#defaultAmount" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Use the default amount</a>
+                <a href="#maxAmount" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Enter max amount</a>
+                <a href="#AddExpense" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Add expense</a>
+            </div>
+
+            <div data-role="footer">
+
+            </div>
+        </div>
+        <!--Amount -->
+
+        <div data-role="page" id="defaultAmount">
+            <div data-role="header">
+
+            </div>
+
+            <div data-role="main" class="ui-content">
+                <h2>Shopping day:</h2>
+                <a id="h2DayVal"></a>
+                <a>Expense:</a>
+                <a id="ExpenseVal"></a>
+                <input type="text" name="name" id="lastExpenses" value="" />
+                <div>
+                    <!-- TODO: keyboard with action buttons-->
+                </div>
+                <a href="#expenses" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Confirm</a>
+            </div>
+
+            <div data-role="footer">
+
+            </div>
+        </div>
+
+        <div data-role="page" id="maxAmount">
+            <div data-role="header">
+
+            </div>
+
+            <div data-role="main" class="ui-content">
+                <h2>Set amount</h2>
+                <input type="text" name="name" id="setExpense" value="" />
+                <a href="#defaultAmount" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Confirm</a>
+            </div>
+
+            <div data-role="footer">
+
+            </div>
+        </div>
+        
+	</body>
+	
+</html>
