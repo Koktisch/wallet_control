@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta http-equiv="Content-type" content="text/html"; charset="utf-8" name="viewport" />
-		<link href="css/bootstrap.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
-		<link rel="stylesheet" href="css/style.css" />
-		<script src="js/bootstrap.min.js"></script>
-		<script src="cordova.js"></script>
-		<script src="js/jquery-2.1.4.min.js"></script>
-		<script src="js/jquery.mobile-1.4.5.min.js"></script>
-		<script src="js/wallet_control.js"></script>
-	</head>
-	
-	<body>
-		<!-- Main page, will not contain header because app title name -->
-		<div data-role="page" id="mainPage">
-			<div data-role="main" class="ui-content">
-				<h1>Wallet Control</h1>
+  <head>
+    <meta http-equiv="Content-type" charset="utf-8" name="viewport" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- <script src="js/bootstrap.min.js"></script> -->
+    <script src="cordova.js"></script>
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="js/wallet_control.js"></script>
+  </head>
+
+  <body onload="refreshExpenseValue()">
+    <!-- Main page, will not contain header because app title name -->
+    <div data-role="page" id="mainPage">
+      <div data-role="main" class="ui-content">
+        <h1>Wallet Control</h1>
                 <a href="#shopping" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Start shopping</a>
                 <a href="#settings" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Settings</a>
-			</div>
-		</div>
+      </div>
+    </div>
+
         <!-- Settings -->
         <div data-role="panel" id="settings">
             <h2>Settings</h2>
@@ -38,7 +39,8 @@
                 <input type="text" name="name" id="expense" value="" />
             </div>
             <a href="#mainPage" data-rel="close" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a ui-icon-back ui-btn-icon-left">Back</a>
-        </div> 
+        </div>
+
         <!--Selection panel -->
         <div data-role="page" id="shopping">
             <div data-role="header">
@@ -50,7 +52,7 @@
                 <a href="#maxAmount" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Enter max amount</a>
                 <a href="#AddExpense" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Add expense</a>
             </div>
-
+      <a href="#mainPage" data-rel="close" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a ui-icon-back ui-btn-icon-left">Back</a>
             <div data-role="footer">
 
             </div>
@@ -65,13 +67,31 @@
             <div data-role="main" class="ui-content">
                 <h2>Shopping day:</h2>
                 <a id="h2DayVal"></a>
-                <a>Expense:</a>
+                <h3>Money Left:</h3>
+                <input type="text" name="moneysLeft" id="moneysLeft" value="" readonly/>
+                <h3>Expense:</h3>
                 <a id="ExpenseVal"></a>
-                <input type="text" name="name" id="lastExpenses" value="" />
-                <div>
-                    <!-- TODO: keyboard with action buttons-->
+                <input type="text" name="lastExpenses" id="lastExpenses" value="" style="text-align:right; color: black;" value="" readonly>
+                <div id="keyboard">
+                    <div id="numbers">
+                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-left: 5%;" onclick='setNumber(this)'>9</button>
+                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>8</button>
+                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>7</button>
+                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-left: 5%;" onclick='setNumber(this)'>6</button>
+                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>5</button>
+                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>4</button>
+                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-left: 5%;" onclick='setNumber(this)'>3</button>
+                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>2</button>
+                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>1</button>
+                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-left: 5%;" onclick='buttonSpecialSign(this)'>,</button>
+                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>0</button>
+                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-right: 5%;" onclick='buttonSpecialSign(this)'>X</button>
+                      <button type="button" class="btn btn-default btn-sm" style="width: 45%; float: left; background-color: #a8ed64;margin-left: 5%;">ADD</button>
+                      <button type="button" class="btn btn-default btn-sm" style="width: 45%; float: none; background-color: #eda864; margin-top:5px;">REMOVE</button>
+                      <button type="button" class="btn btn-primary btn-sm btn-lg" style="width: 90%; margin-left: 5%; margin-right: 5%; background-color: #64ed64;">FINISH</button>
+                      <button type="button" class="btn btn-primary btn-sm btn-lg" style="width: 90%; margin-left: 5%; margin-right: 5%; background-color: #ed6464;">CANCEL</button>
+                    </div>
                 </div>
-                <a href="#expenses" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Confirm</a>
             </div>
 
             <div data-role="footer">
@@ -94,7 +114,6 @@
 
             </div>
         </div>
-        
-	</body>
-	
+  </body>
+
 </html>
