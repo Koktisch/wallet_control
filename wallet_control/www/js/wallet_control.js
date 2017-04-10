@@ -1,4 +1,5 @@
 var listOfExpenses = [];
+var listOfSettings = [];
 
 function refreshExpenseValue() {
     document.getElementById('lastExpenses').value = 0;
@@ -31,6 +32,14 @@ function getExpenseValue(){
   }
 }
 
+function getCurrency() {
+
+}
+
+function converterToDefaultCurrency() {
+
+}
+
 function addToArray()
 {
     var val = getExpenseValue();
@@ -39,7 +48,7 @@ function addToArray()
     var type = getType();
     var date = new Date();
     var strDate = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes();
-    if (id == 'undefined')
+    if (id == null)
     {
         id = 1;
         localStorage.setItem('DbID', id);
@@ -54,6 +63,7 @@ function addToArray()
     {
         //TODO: walidacja/ pojawienie się błędu z nie wybranym typem
     }
+
 }
 
 function getType() {
@@ -117,23 +127,17 @@ function decimalValue(val) {
     return true;
 }
 
-//DB functions
-function createDatabase()
-{
-    var db = openDatabase('MainDB', '1.0', 'ExpensesDB', 2 * 1024 * 1024);
-    db.transaction(function (tx) {
-        tx.executeSql('CREATE TABLE IF NOT EXISTS Expenses (id unique, type, value, amount, date)');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS Settings (id unique, setting, value)');
-    });
+function cancelExpenses() {
+    if (listOfExpenses.length != 0) {
+        listOfExpenses = [];
+    }
 }
 
-function insertToDatabase() {
-    var db = openDatabase('MainDB', '1.0', 'ExpensesDB', 2 * 1024 * 1024);
-    for (var x = 0; x < obj.length; x++)
-    {
-        db.transaction(function (tx) {
-            tx.executeSql('CREATE TABLE IF NOT EXISTS Expenses (id unique, type, value, amount date)');
-            tx.executeSql('INSERT INTO Expenses (id,type,value,date) VALUES (?,?,?,?)', [id, type, val, amount, strDate]);
-        });
-    }
+//DB functions
+function insertExpensesToDatabase() {
+    sessionStorage.setItem('dbExpense', listOfExpenses);
+}
+
+function insertSettingsToDatabase() {
+    sessionStorage.setItem('dbSettings', listOfSettings);
 }
