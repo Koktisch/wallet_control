@@ -1,25 +1,18 @@
 var listOfExpenses = [];
-var listOfSettings = [];
+var settings = {
+    balance: "",
+    setCurrency: "",
+    expense: ""
+};
 
 function refreshExpenseValue() {
     document.getElementById('lastExpenses').value = 0;
 }
 
-
 function removeSign() {
     var val = getExpenseValue();
     val = val.slice(0, -1);
     insertValueToExpense(val);
-}
-
-function setDay()
-{
-    if (document.getElementById('h2DayVal').innerHTML == '') {
-        var now = new Date();
-        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        var day = days[now.getDay()];
-        document.getElementById('h2DayVal').innerHTML += " " + day;
-    }
 }
 
 function getExpenseValue(){
@@ -32,12 +25,31 @@ function getExpenseValue(){
   }
 }
 
-function getCurrency() {
-
+// funkcja ustawiajaca walute na ekranie dodawania wydaktow w zaleznosci od ustawien w opcjach
+function setDefaultCurrency() {
+    setSettings();
+	$('#setCurrency').on('change', function(){
+		$('#currency').val($(this).val());
+	});
 }
+// wywolanie ww funkcji po uruchomieniu aplikacji
+$(document).ready(function(){
+	setDefaultCurrency();
+});
 
 function converterToDefaultCurrency() {
 
+}
+
+function getExchangeRate()
+{
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://api.nbp.pl/api/exchangerates/tables/C/?format=json", false);
+    xhr.send();
+    if (xhr.status == 200)
+    {
+        sessionStorage.setItem('dbExchanfeRate',xhr.responseText);
+    } 
 }
 
 function addToArray()
@@ -127,17 +139,50 @@ function decimalValue(val) {
     return true;
 }
 
+function setSettingsInDB(e)
+{   
+    settingBD = sessionStorage.getItem('dbSettings', settings);
+    settings = $.parseJSON(settingBD);
+    switch (e.id)
+    {
+        case "balance":
+            settings.balance = $("#" + e.id).val();
+            break;
+        case "setCurrency":
+            settings.setCurrency = $("#"+e.id+ " option:selected").val();
+            break;
+        case "expense":
+            settings.expense = $("#"+e.id).val();
+            break;
+        default:
+            ;
+            break;
+    }
+    insertSettingsToDatabase();
+}
+
 function cancelExpenses() {
     if (listOfExpenses.length != 0) {
         listOfExpenses = [];
     }
 }
 
+function setSettings() {
+    var sett = sessionStorage.getItem('dbSettings', settings);
+    if (sett != "undefined") {
+        var setobj = $.parseJSON(sett);
+        $("#balance").val(setobj.balance);        
+        $("#expense").val(setobj.expense);
+        $('#currencySelect').val(setobj.setCurrency).change();
+    }
+}
+
 //DB functions
 function insertExpensesToDatabase() {
-    sessionStorage.setItem('dbExpense', listOfExpenses);
+    sessionStorage.setItem('dbExpense', JSON.stringify(listOfExpenses));
 }
 
 function insertSettingsToDatabase() {
-    sessionStorage.setItem('dbSettings', listOfSettings);
+    sessionStorage.setItem('dbSettings', JSON.stringify(settings));
 }
+
