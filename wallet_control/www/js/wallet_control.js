@@ -38,9 +38,15 @@ function getExpenseValue(){
 
 function putInList(e) {
     var newDiv = '<div class="newAddedExpenseList" ' + ">" + 'Value:' + e.value + "  Type:" + e.type +
-        "<a class=\"ui-btn ui-icon - delete ui-btn-icon-right\" onclick=\"$(this.parent).remove();\"></a>"
+        "<a class=\"ui-btn ui-icon - delete ui-btn-icon-right\" onclick=\"removeFromList(this);\"></a>"
         + "</div>";
     $('#listExpenses').append(newDiv); 
+}
+
+function removeFromList(ethis)
+{
+    var innerTxt = ethis.parentElement.innerHTML;
+    ethis.parentElement.outerHTML = "";
 }
 
 function refreshExpenseValue() {
@@ -126,7 +132,7 @@ function addToArray()
     var val = getExpenseValue();  
     var valmoney = val.split("X")[0];
     var nb = val.split("X")[1];
-    if (getCurrency() != "EUR") {
+    if (getCurrency() != "PLN") {
         valmoney = converterToDefaultCurrency(valmoney);
     }
     if (nb != undefined && nb != 0) {
@@ -254,8 +260,7 @@ function setSettings() {
     if (sett != "undefined") {
         var setobj = $.parseJSON(sett);
         $("#balance").val(setobj.balance);
-        $("#expense").val(setobj.expense);
-        $('#ddlCurrency').val(setobj.currency);        
+        $("#expense").val(setobj.expense);      
     }
 }
 
@@ -263,7 +268,6 @@ function saveSetting()
 {
     settings.balance = $("#balance").val();
     settings.expense = $("#expense").val();
-    settings.currency = $('#ddlCurrency').val();
     localStorage.setItem('dbSettings', JSON.stringify(settings));
     if (curentMoney != null) {
         localStorage.setItem('dbMoney', JSON.stringify(curentMoney));
