@@ -1,19 +1,59 @@
 @font-face { font-family: Bernard MT; src: url('../fonts/BERNHC.ttf'); } 
 
 body{
-	font-family: 				Arial, Helvetica, sans-serif;
-	background-color: 	#6495ed;
+	font-family: Arial, Helvetica, sans-serif;
 }
 h1{
-	font-family: 				Bernard MT;
-	color:						white;
-	text-align: 				center;
+	font-family: Bernard MT;
+	color: white;
+	text-align: center;
+}
+h2{
+	text-shadow: none;
+}
+h3{
+	text-shadow: none;
+}
+h4{
+	text-shadow: none;
 }
 .number-button{
 	width: 15px;
-	height:15px;
+	height: 15px;
 }
-expensesList {
-    width: 100vh;
+.ui-content{
+	background-color: #6495ed;
+	height: 80%;
+}
+.menu-button{
+	min-height: 15px;
+	width: 80%;
+	margin-left: 10%;
+	margin-right: 10%;
+}
+.color-button{
+	border: 0px;
+	text-shadow: none !important;
+}
+#cancel_shopping{
+}
+#finish_shopping{
+}
+#footer{
+	height: 20%;
+}
+#keyboard{
+	min-height: 420px;
+}
+.ui-btn{
+}
+select:focus{
+	color: #000;
+}
+
+.newAddedExpenseList
+{
+    width: 100%;
     height: 50px;
+    border: 1px solid gray;
 }

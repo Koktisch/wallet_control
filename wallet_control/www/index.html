@@ -17,7 +17,7 @@
 	</style>
   </head>
 
-  <body onload="setSettings()">
+  <body onload="setMoney()">
     <!-- Main page, will not contain header because app title name -->
     <div data-role="page" id="mainPage">
         <!-- Settings -->
@@ -25,35 +25,35 @@
             <h2>Settings</h2>
             <div data-role="fieldcontain">
                 <p>Balance:</p>
-                <input type="text" name="name" id="balance" value="" onchange="setSettingsInDB(this)"/>
+                <input onchange="saveSetting();" type="number" name="name" id="balance" value="" />
             </div>
             <div data-role="fieldcontain">
                 <p>Default Currency:</p>
-                <select id="currencySelect" name="select-native-1" style="height:40px; width: 90%; margin-left:5%; margin-right:5%;" onchange="setSettingsInDB(this)">
-                            <option style="color: grey" value="">Choose currency</option>
-                            <option value="euro">EUR</option>
-                            <option value="dolar">USD</option>
-                            <option value="zloty">PLN</option>
-                            <option value="pound">GBP</option>
-							<option value="czech">CZK</option>
-							<option value="croatian">HRK</option>
-							<option value="lat">LVL</option>
-							<option value="sweden">SEK</option>
-                            <option value="dunsk">DKK</option>
-							<option value="norway">NOK</option>
+                <select onchange="saveSetting();" id="ddlCurrency" name="select-native-1" style="height:40px; width: 90%; margin-left:5%; margin-right:5%;">                           
+                            <option value="EUR" >EUR</option>
+                            <option value="USD">USD</option>
+                            <option value="PLN">PLN</option>
+                            <option value="GBP">GBP</option>
+							<option value="CZK">CZK</option>
+							<option value="HRK">HRK</option>
+							<option value="LVL">LVL</option>
+							<option value="SEK">SEK</option>
+                            <option value="DKK">DKK</option>
+							<option value="NOK">NOK</option>
                         </select>
             </div>
             <div data-role="fieldcontain">
                 <p>The amount of one expense:</p>
-                <input type="text" name="name" id="expense" value="" onchange="setSettingsInDB(this)"/>
+                <input onchange="saveSetting(); setMoney();" type="number" name="name" id="expense" value="" />
             </div>
             <a href="#mainPage" data-rel="close" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a ui-icon-back ui-btn-icon-left">Back</a>
         </div>
 
       <div data-role="main" class="ui-content">
         <h1>Wallet Control</h1>
-                <a href="#shopping" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Start shopping</a>
-                <a href="#settings" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Settings</a>
+                <a href="#shopping" class="ui-btn ui-btn-inline ui-corner-all ui-shadow menu-button">Start shopping</a>
+                <a onclick="setSettings()" href="#settings" class="ui-btn ui-btn-inline ui-corner-all ui-shadow menu-button">Settings</a>
+				<a href="#about" class="ui-btn ui-btn-inline ui-corner-all ui-shadow menu-button">About app</a>
       </div>
     </div>      
 
@@ -64,9 +64,8 @@
             </div>
 
             <div data-role="main" class="ui-content">
-                <a href="#defaultAmount" class="ui-btn ui-btn-inline ui-corner-all ui-shadow" onclick="createDatabase();">Add expense</a>
-                <a href="#maxAmount" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Enter max amount</a>
-                <!-- <a href="#AddExpense" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Add expense</a> -->
+                <a id="addExpense" href="#defaultAmount" class="ui-btn ui-btn-inline ui-corner-all ui-shadow menu-button">Add expense</a>
+                <a href="#maxAmount" class="ui-btn ui-btn-inline ui-corner-all ui-shadow menu-button">Enter max amount</a>               
             </div>
       <a href="#mainPage" data-rel="close" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a ui-icon-back ui-btn-icon-left">Back</a>
             <div data-role="footer">
@@ -76,11 +75,16 @@
         <!--Amount -->
         <div data-role="page" id="defaultAmount">
             <div data-role="header">
-                <div id="expensesList"></div>
+                <div data-role="panel" data-position="top" id="listOfExpenses">					
+					<div id="listExpenses">
+
+                    </div>
+                    <a href="#defaultAmount" data-rel="close" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a ui-icon-back ui-btn-icon-left">Close list</a>
+				</div>	               
             </div>
 
-            <div data-role="main" class="ui-content">                
-                <h4 style="margin-left:5%; margin-right:5%;">Money Left:</h4>
+            <div data-role="main" class="ui-content">
+                <h4 id="money" style="margin-left:5%; margin-right:5%;">Money Left:</h4>
 				<div style="float:left; width:90%; margin-left:5%; margin-right:5%;">
 					<input type="text" name="moneysLeft" id="moneysLeft" value="" style="margin-left:5%; margin-right:5%;" readonly />
 				</div>
@@ -106,7 +110,6 @@
 					</div>
                     <div style="height: 65px; width: 90%; margin-left:5%; margin-right:5%;">
                         <select id="typeSelect" name="select-native-1" style="height:40px; width: 90%; margin-left:5%; margin-right:5%;">
-                            <option selected="selected" style="color: grey" value="">Choose category...</option>
                             <option value="food">Food</option>
                             <option value="clothes">Clothes</option>
                             <option value="rent">Rent</option>
@@ -115,32 +118,31 @@
 							<option value="alcohol">Alcohol</option>
 							<option value="entertaiment">Entertaiment</option>
 							<option value="car">Car</option>
-                            <option value="othere">Othere</option>
+                            <option selected="selected" value="othere">Othere</option>
                         </select>
                     </div>
                 </div>
                 <div id="keyboard">
-                    <div id="numbers">
-                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-left: 5%;" onclick='setNumber(this)'>9</button>
-                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>8</button>
-                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>7</button>
-                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-left: 5%;" onclick='setNumber(this)'>6</button>
-                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>5</button>
-                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>4</button>
-                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-left: 5%;" onclick='setNumber(this)'>3</button>
-                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>2</button>
-                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>1</button>
-                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-left: 5%;" onclick='buttonSpecialSign(this)'>,</button>
-                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>0</button>
-                      <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-right: 5%;" onclick='buttonSpecialSign(this)'>X</button>
-                      <button type="button" class="btn btn-default btn-sm" style="width: 45%; float: left; background-color: #a8ed64;margin-left: 5%;" onclick="addToArray();">ADD</button>
-                      <button type="button" class="btn btn-default btn-sm" style="width: 45%; float: left; background-color: #eda864; margin-top: 8px;" onclick="removeSign();">REMOVE</button>
-                      <button type="button" class="btn btn-primary btn-sm btn-lg" style="width: 90%; margin-left: 5%; margin-right: 5%; background-color: #64ed64;" onclick="insertExpensesToDatabase();">FINISH</button>
-                      <button type="button" class="btn btn-primary btn-sm btn-lg" style="width: 90%; margin-left: 5%; margin-right: 5%; background-color: #ed6464;">CANCEL</button>
-                    </div>
+                    <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-left: 5%;" onclick='setNumber(this)'>9</button>
+                    <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>8</button>
+                    <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>7</button>
+                    <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-left: 5%;" onclick='setNumber(this)'>6</button>
+                    <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>5</button>
+                    <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>4</button>
+                    <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-left: 5%;" onclick='setNumber(this)'>3</button>
+                    <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>2</button>
+                    <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>1</button>
+                    <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-left: 5%;" onclick='buttonSpecialSign(this)'>,</button>
+                    <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left;" onclick='setNumber(this)'>0</button>
+                    <button type="button" class="btn btn-default btn-sm" style="width: 30%; float: left; margin-right: 5%;" onclick='buttonSpecialSign(this)'>X</button>
+					<button type="button" class="btn btn-default btn-sm color-button" style="width: 45%; float: left; background-color: #a8ed64;margin-left: 5%;" onclick="addToArray();">ADD</button>
+					<button type="button" class="btn btn-default btn-sm color-button" style="width: 45%; float: left; background-color: #eda864; margin-top: 8px;" onclick="removeSign();">REMOVE</button>
+					<button id="finish_shopping" type="button" class="btn btn-primary btn-sm btn-lg color-button" style="width: 90%; margin-left: 5%; margin-right: 5%; background-color: #64ed64;" onclick="insertExpensesToDatabase();">FINISH</button>
+					<button id="cancel_shopping" type="button" class="btn btn-primary btn-sm btn-lg color-button" style="width: 90%; margin-left: 5%; margin-right: 5%; background-color: #ed6464;">CANCEL</button>
+                    <a id="hdShopping" href="#shopping" style="visibility:hidden"></a>
                 </div>
             </div>
-
+			<a href="#listOfExpenses" class="ui-btn ui-btn-inline ui-corner-all ui-shadow menu-button">Show expenses</a>
             <div data-role="footer">
 
             </div>
@@ -154,10 +156,10 @@
             <div data-role="main" class="ui-content">
                 <h2>Set amount</h2>
                 <input type="text" name="name" id="setExpense" value="" />
-                <a href="#defaultAmount" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Confirm</a>
+                <a href="#defaultAmount" class="ui-btn ui-btn-inline ui-corner-all ui-shadow" onclick="setFromAmount()">Confirm</a>
             </div>
 
-            <div data-role="footer">
+            <div id="footer" data-role="footer">
 
             </div>
         </div>
