@@ -285,7 +285,7 @@ function setBalance(monLimit)
     {
         spentVal +=  listOfExpenses[x].value;
     }    
-   /* if (monLimit > 0) {
+    if (monLimit > 0) {
         navigator.notification.alert(
             'You spent ' + parseFloat(spentVal).toFixed(2) + '\n' + 'Monthly limit ' + parseFloat(monLimit).toFixed(2),
             null,
@@ -300,7 +300,7 @@ function setBalance(monLimit)
             '',
             'Ok'
         );
-    }*/
+    }
     balanceVal = spentVal;
 }
 //DB functions
