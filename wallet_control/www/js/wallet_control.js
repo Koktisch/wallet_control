@@ -37,7 +37,7 @@ function getExpenseValue(){
 }
 
 function putInList(e) {
-    var newDiv = '<div class="newAddedExpenseList" ' + ">" + 'Value:' + e.value + "  Type:" + e.type +
+    var newDiv = '<div id=\"' + e.id + '\" class="newAddedExpenseList" ' + ">" + 'Value:' + parseFloat(e.value).toFixed(2) + "  Type:" + e.type +
         "<a class=\"ui-btn ui-icon - delete ui-btn-icon-right\" onclick=\"removeFromList(this);\"></a>"
         + "</div>";
     $('#listExpenses').append(newDiv); 
@@ -45,8 +45,21 @@ function putInList(e) {
 
 function removeFromList(ethis)
 {
-    var innerTxt = ethis.parentElement.innerHTML;
+    var parent = ethis.parentElement;
+    var innerTxt = parent.innerHTML;
     ethis.parentElement.outerHTML = "";
+    for (var x = 0; x < listOfExpenses.length; x++)
+    {
+        if (parent.id == listOfExpenses[x].id)
+        {
+            var varVal = listOfExpenses[x].value;
+            var valVar = parseFloat($('#moneysLeft').val());
+            var fVal = varVal + valVar;
+            fVal = parseFloat(fVal).toFixed(2);
+            $('#moneysLeft').val('');
+            $('#moneysLeft').val(fVal);
+        }
+    }
 }
 
 function refreshExpenseValue() {
@@ -61,6 +74,12 @@ function getExchangeRate() {
         if (xhr.status == 200) {
             localStorage.setItem('dbExchangeRate', xhr.responseText);
         }
+        navigator.notification.alert(
+            'Succeed',
+            null,
+            'Succeed',
+            'OK'
+        );
     }
     catch (err)
     {
@@ -151,7 +170,7 @@ function addToArray()
         localStorage.setItem('DbID', id);
     }
     if (val != "" && type !== 'Othere') {
-        objExpenses = { id: id, type: type, value: val, date: strDate };
+        objExpenses = { id: id, type: type, value: parseFloat(val), date: strDate };
         listOfExpenses.push(objExpenses);    
         localStorage.setItem('DbID', ++id); 
         refreshExpenseValue();
@@ -160,7 +179,7 @@ function addToArray()
     }
     else
     {
-        objExpenses = { id: id, type: 'Othere', value: val, date: strDate };
+        objExpenses = { id: id, type: 'Othere', value: parseFloat(val), date: strDate };
         listOfExpenses.push(objExpenses);
         localStorage.setItem('DbID', ++id);
         refreshExpenseValue();
@@ -283,11 +302,12 @@ function setBalance(monLimit)
     var spentVal = 0;
     for (var x = 0; x < listOfExpenses.length; x++)
     {
-        spentVal +=  listOfExpenses[x].value;
+        spentVal += parseFloat(listOfExpenses[x].value).toFixed(2);
     }    
+    monLimit -= spentVal;
     if (monLimit > 0) {
         navigator.notification.alert(
-            'You spent ' + parseFloat(spentVal).toFixed(2) + '\n' + 'Monthly limit ' + parseFloat(monLimit).toFixed(2),
+            'You spent ' + parseFloat(spentVal).toFixed(2) + '\n' + 'Monthly limit ' + parseFloat(monLimit - spentVal).toFixed(2),
             null,
             '',
             'Ok'
@@ -295,7 +315,7 @@ function setBalance(monLimit)
     }
     else {
         navigator.notification.alert(
-            'You spent ' + parseFloat(spentVal).toFixed(2) + '\n' + 'Monthly limit ' + parseFloat(monLimit).toFixed(2) + '\n' + 'Limit exceeded!',
+            'You spent ' + parseFloat(spentVal).toFixed(2) + '\n' + 'Monthly limit ' + parseFloat(monLimit - spentVal).toFixed(2) + '\n' + 'Limit exceeded!',
             null,
             '',
             'Ok'
@@ -307,7 +327,6 @@ function setBalance(monLimit)
 function insertExpensesToDatabase() {
     localStorage.setItem('dbExpense', JSON.stringify(listOfExpenses));
     var bal = $.parseJSON(localStorage.getItem('dbMoney'));
-    setBalance(bal.val - balanceVal);
-    localStorage.setItem('dbBalance', JSON.stringify(bal.val - balanceVal));    
-    localStorage.setItem('dbMoney', JSON.stringify(curentMoney));
+    setBalance(bal);   
+    localStorage.setItem('dbMoney', JSON.stringify(balanceVal));
 } 
