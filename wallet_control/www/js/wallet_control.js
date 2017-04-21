@@ -69,19 +69,12 @@ function refreshExpenseValue() {
 function getExchangeRate() {
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "http://api.nbp.pl/api/exchangerates/tables/C/?format=json", false);
+        xhr.open("GET", "http://api.nbp.pl/api/exchangerates/tables/C/?format=xml", false);
         xhr.send();
         if (xhr.status == 200) {
             localStorage.setItem('dbExchangeRate', xhr.responseText);
             currencyTable = $.parseJSON(localStorage.getItem('dbExchangeRate'));
         }
-        //test api
-        navigator.notification.alert(
-            currencyTable[0].rates[1].ask,
-            null,
-            currencyTable[0].rates[1].ask,
-            'OK'
-        );
     }
     catch (err)
     {
