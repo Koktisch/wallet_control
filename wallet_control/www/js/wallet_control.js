@@ -74,17 +74,18 @@ function getExchangeRate() {
         if (xhr.status == 200) {
             localStorage.setItem('dbExchangeRate', xhr.responseText);
         }
+        //test api
         navigator.notification.alert(
-            'Succeed',
+            'Succeed 1',
             null,
-            'Succeed',
+            xhr.responseText,
             'OK'
         );
     }
     catch (err)
     {
         navigator.notification.alert(
-            'An unknown error occurred while retrieving the data. Please check your network connection or enter expense in EUR and try again.',  
+            'An unknown error occurred while retrieving the data. Please check your network connection or enter expense in PLN and try again.',  
             null,         
             'Error',          
             'OK'               
@@ -160,6 +161,13 @@ function addToArray()
     else {
         val = valmoney;
     }
+    //test api
+    navigator.notification.alert(
+        'Succeed 2',
+        null,
+        val,
+        'OK'
+    );
     var id = localStorage.getItem('DbID');
     var type = getType();    
     var date = new Date();
