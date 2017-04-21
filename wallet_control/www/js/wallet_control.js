@@ -74,7 +74,14 @@ function getExchangeRate() {
         if (xhr.status == 200) {
             localStorage.setItem('dbExchangeRate', xhr.responseText);
             currencyTable = $.parseJSON(localStorage.getItem('dbExchangeRate'));
-        }        
+        }
+        //test api
+        navigator.notification.alert(
+            currencyTable[0].rates[1].ask,
+            null,
+            currencyTable[0].rates[1].ask,
+            'OK'
+        );
     }
     catch (err)
     {
@@ -155,13 +162,6 @@ function addToArray()
     else {
         val = valmoney;
     }
-    //test api
-    navigator.notification.alert(
-        'Succeed 2',
-        null,
-        val,
-        'OK'
-    );
     var id = localStorage.getItem('DbID');
     var type = getType();    
     var date = new Date();
