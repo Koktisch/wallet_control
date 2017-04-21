@@ -28,7 +28,7 @@ function removeSign() {
 
 function getExpenseValue(){
     var expense = document.getElementById('lastExpenses').value;
-  if ((expense == 0) || (expense == null) || (expense == "0")){
+    if (((expense == 0) && (expense != '0.')) || (expense == null) || (expense == "0")){
     return "";
   }
   else{
