@@ -78,7 +78,7 @@ function getExchangeRate() {
         navigator.notification.alert(
             'Succeed 1',
             null,
-            xhr.responseText,
+            localStorage.getItem('dbExchangeRate'),
             'OK'
         );
     }
