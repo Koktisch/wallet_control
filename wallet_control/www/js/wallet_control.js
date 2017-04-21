@@ -16,7 +16,7 @@ var curentMoney = {
     val: "",
     date: ""
 };
-
+var currencyTable;
 var balanceVal;
 
 function removeSign() {
@@ -73,14 +73,8 @@ function getExchangeRate() {
         xhr.send();
         if (xhr.status == 200) {
             localStorage.setItem('dbExchangeRate', xhr.responseText);
-        }
-        //test api
-        navigator.notification.alert(
-            'Succeed 1',
-            null,
-            localStorage.getItem('dbExchangeRate'),
-            'OK'
-        );
+            currencyTable = $.parseJSON(localStorage.getItem('dbExchangeRate'));
+        }        
     }
     catch (err)
     {
@@ -123,7 +117,7 @@ function setMoney(valu)
     };
 }
 function converterToDefaultCurrency(valmoney) {
-    var currencyTable = $.parseJSON(localStorage.getItem('dbExchangeRate'));
+    currencyTable = $.parseJSON(localStorage.getItem('dbExchangeRate'));
     if (currencyTable == null)
     {
         getExchangeRate();
