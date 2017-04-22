@@ -1,4 +1,4 @@
-var listOfExpenses = [];
+﻿var listOfExpenses = [];
 var date = new Date();
 var settings = {
     balance: "",
