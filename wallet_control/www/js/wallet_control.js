@@ -68,8 +68,15 @@ function refreshExpenseValue() {
 
 function getExchangeRate() {
     try {
+        //var xhr = new XMLHttpRequest();
+        //xhr.open("GET", "http://api.nbp.pl/api/exchangerates/tables/C/?format=xml", false);
+        //xhr.send();
+        //if (xhr.status == 200) {
+        //    localStorage.setItem('dbExchangeRate', xhr.responseText);
+        //    currencyTable = $.parseJSON(localStorage.getItem('dbExchangeRate'));
+        //}
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "http://api.nbp.pl/api/exchangerates/tables/C/?format=xml", false);
+        xhr.open("GET", "https://openexchangerates.org/api/latest.json?app_id=b80d5cee14184fee81ff3ab665cb88e9", false);
         xhr.send();
         if (xhr.status == 200) {
             localStorage.setItem('dbExchangeRate', xhr.responseText);
@@ -289,7 +296,6 @@ function saveSetting()
     else {
         localStorage.setItem('dbMoney', JSON.stringify(settings.balance));
     }
-    $('#lastExpenses').val(settings.expense);
 }
 
 function setBalance(monLimit)
